@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import web.service.CarService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +20,11 @@ public class CarController {
     }
 
     @GetMapping("/askCar")
-    public String printCar(HttpServletRequest httpServletRequest, ModelMap modelMap) {
-        if (httpServletRequest.getParameter("count") == null) {
+    public String printCar(@RequestParam(value = "count", required = false) String count, ModelMap modelMap) {
+        if (count == null) {
             modelMap.addAttribute("cars", carService.getCar());
         } else {
-        int count = Integer.parseInt(httpServletRequest.getParameter("count"));
-        modelMap.addAttribute("cars", carService.getCarByNumber(count));
+        modelMap.addAttribute("cars", carService.getCarByNumber(Integer.parseInt(count)));
         }
         return "cars";
     }
